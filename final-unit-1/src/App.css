@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Workbench&family=Poppins:wght@400;600;700&display=swap');
+
+#root {
+  color: white;
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-evenly;
+  align-content: space-around;
+}
+
+body {
+  margin: 0;
+  background-color: black;
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+main {
+  padding: 2rem;
+  background-color: black;
+}
+
+p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #d0d0d0;
+  line-height: 1.7;
+}
+
+h1, h2 {
+  font-family: "Workbench", sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #f5f5f5;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.2);
+}
+
+header, footer {
+  background-color: rgb(41, 41, 41);
+  padding: 1rem;
+  text-align: center;
+  animation: background-fade 4s infinite;
+  color: white;
+}
+
+@keyframes background-fade {
+  0% { background-color: rgb(41, 41, 41); }
+  50% { background-color: #8B0000; }
+  100% { background-color: rgb(41, 41, 41); }
+}
+
+img {
+  width: auto;
+  height: 400px;
+  border-radius: 10px;
+}
+
+a {
+  color: rgb(172, 172, 172);
+  text-decoration: none;
+}
+
+a:hover {
+  font-size: 18px;
+  text-decoration: underline;
+}
+
+button {
+  background-color: #cc0000;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600; 
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: black;
+  color: white;
+  font-size: 1.1rem;
+  border: solid white;
+}
+
+.results {
+  background-color: #8B0000;
+  padding: 2rem;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.results ol {
+  padding-left: 1.5rem;
+  list-style-position: inside;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #fff;
+  counter-reset: item;
+}
+
+.results li {
+  background-color: #300000;
+  margin: 0.75rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  color: white;
+  font-size: 1rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.genre-selector, .year-selector, .category-selector {
+  background-color: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin: 1.5rem auto;
+  max-width: 400px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+select, input[type="range"] {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #444;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+.about-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #111;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  margin: 1.5rem auto;
+  max-width: 400px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.about-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+.about-card img {
+  width: 250px;
+  height: auto;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.about-card h2 {
+  font-family: "Workbench", sans-serif;
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.about-card p {
+  color: #ccc;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-family: 'Poppins', sans-serif;
+}
+
+.random-recommendation {
+  background-color: #222;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+  .container {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .navigation ul {
+    flex-direction: column;
+  }
+  img {
+    max-height: 250px;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 1024px) {
+  body {
+    font-size: 16px;
+  }
+  .container {
+    width: 80%;
+  }
+  .navigation ul {
+    flex-direction: row;
+  }
+  img {
+    max-height: 350px;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  body {
+    font-size: 18px;
+  }
+  .container {
+    width: 70%;
+  }
+  .navigation ul {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  img {
+    max-height: 400px;
+  }
+}
+
+.workbench {
+  font-family: "Workbench", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "BLED" 0,
+    "SCAN" 0;
+}

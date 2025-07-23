@@ -1,0 +1,57 @@
+[
+  {
+    "Subject": "About Me",
+    "Blurb": "Hi, I'm August Keller, and I love filmmaking as an art form. It combines many different mediums (music, photography, acting, etc.) into accessible entertainment. I am eager to learn everything I can about film and share my findings with like-minded people. I hope you enjoy my journey as much as I do!",
+    "Image": "https://yt3.googleusercontent.com/ytc/AIdro_nqJw4ZthoW2lQ2R9_dPNCTeE1bw2dQAhHdusVzx34j3Q=s900-c-k-c0x00ffffff-no-rj"
+  },
+    {
+    "Subject": "Writing",
+    "Blurb": "In storytelling, plot refers to the sequence of events that make up the narrative, while theme is the underlying message or idea the author explores. Drama in storytelling refers to the use of conflict and heightened emotional moments to engage the audience and drive the narrative forward. The three-act structure is a narrative model that divides a story into three parts: Act I (Setup), Act II (Confrontation), and Act III (Resolution). The three-act structure is a narrative model that divides a story into three parts: Act I (Setup), Act II (Confrontation), and Act III (Resolution). ",
+    "Image": "https://cdn2.psychologytoday.com/assets/styles/manual_crop_16_9_1200x675/public/field_blog_entry_teaser_image/2021-07/handwriting_literacy_learning.png.jpg?itok=ByDM4Zdf"
+  },
+    {
+    "Subject": "Direction",
+    "Blurb": "In filmmaking, direction encompasses the creative and practical leadership of a film's production. It involves developing the overall vision for the film.",
+    "Image": "https://nofilmschool.com/media-library/how-to-become-a-movie-director-getting-the-job-is-the-job.png?id=34069727&width=1245&height=700&quality=90&coordinates=0%2C81%2C0%2C82"
+  },
+    {
+    "Subject": "Cinematography",
+    "Blurb": "Cinematography is the art and craft of capturing moving images, primarily for film and television. It encompasses all on-screen visual aspects, including lighting, composition, camera angles, and movement, to tell a visual story. ",
+    "Image": "https://morningannouncement.com/wp-content/uploads/2016/11/Fotolia_47323206_Subscription_Monthly_M.jpg"
+  },
+    {
+    "Subject": "Acting",
+    "Blurb": "Acting is the art of performance where actors embody characters and tell stories through dialogue, body language, and facial expressions. It involves understanding a character's motivations and emotions, and bringing them to life.",
+    "Image": "https://d26oc3sg82pgk3.cloudfront.net/files/media/edit/image/33555/original.jpg"
+  },
+    {
+    "Subject": "Editing",
+    "Blurb": "Film editing is the process of assembling individual shots into a cohesive motion picture, a creative and technical task that shapes the narrative and emotional impact of a film. It involves selecting, arranging, and trimming footage.",
+    "Image": "https://www.nyfa.edu/wp-content/uploads/2022/11/Taurus-Final-Reel-1-Avid-MC-Timeline.jpg"
+  },
+    {
+    "Subject": "Sound Design",
+    "Blurb": "Sound design in movies is the art and practice of crafting the complete auditory experience, including dialogue, music, sound effects, and ambiance, to enhance storytelling and immerse the audience in the cinematic world. It's a crucial aspect of filmmaking that goes beyond simply recording sounds; it involves manipulating and integrating these elements to evoke emotions, create atmosphere, and guide the viewer's experience.",
+    "Image": "https://d26oc3sg82pgk3.cloudfront.net/files/media/edit/image/50815/original.jpg"
+  },
+    {
+    "Subject": "Score/Soundtrack",
+    "Blurb": "In films, score and soundtrack refer to different types of musical contributions. The score is original music composed specifically for a film, designed to enhance the emotional impact of scenes and support the narrative. A soundtrack, on the other hand, is a collection of pre-existing songs, often by various artists, that are featured in the film, sometimes complementing the score.",
+    "Image": "https://krui.fm/wordpress/wp-content/uploads/2024/01/FilmScore.jpg"
+  },
+    {
+    "Subject": "Production Design",
+    "Blurb": "Film production design is the process of creating the visual world of a movie, encompassing sets, locations, props, costumes, and more, to support the story's narrative.",
+    "Image": "https://d26oc3sg82pgk3.cloudfront.net/files/media/edit/image/37137/article_full%403x.jpg"
+  },
+    {
+    "Subject": "Casting",
+    "Blurb": "Casting in film is the process of selecting actors for roles in a movie, ensuring they can effectively portray the characters and contribute to the overall vision of the film.",
+    "Image": "https://www.nycastings.com/wp-content/uploads/2017/03/audition2.jpg"
+  },
+    {
+    "Subject": "Effects",
+    "Blurb": "Film effects encompass a wide range of techniques used to create or enhance images in movies, including special effects (SFX) and visual effects (VFX). SFX are practical effects created on set, like explosions or prosthetic makeup, while VFX are digitally added or manipulated in post-production, like CGI or compositing.",
+    "Image": "https://www.watchmojo.com/uploads/thumbs720/Fi-M-Top10-Movies-with-Special-Effects-that-Aged-Well-720p30.jpg"
+  }
+]
