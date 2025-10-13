@@ -4,6 +4,8 @@ import org.launchcode.backend.models.Movie;
 import org.launchcode.backend.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
 
@@ -19,6 +21,15 @@ public class MovieController {
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
+
+    // GET a movie by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
+        return movieRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
     // POST a new movie
     @PostMapping
