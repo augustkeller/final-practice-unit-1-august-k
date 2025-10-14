@@ -1,5 +1,6 @@
 package org.launchcode.backend.controllers;
 
+import org.launchcode.backend.models.Movie;
 import org.launchcode.backend.models.Rating;
 import org.launchcode.backend.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +17,11 @@ public class RatingController {
     @Autowired
     private RatingRepository ratingRepository;
 
-    // GET all ratings
     @GetMapping
     public List<Rating> getAllRatings() {
         return ratingRepository.findAll();
     }
 
-    // POST a new rating
-    @PostMapping
-    public Rating addRating(@RequestBody Rating rating) {
-        return ratingRepository.save(rating);
-    }
-
-    // GET a rating by ID
     @GetMapping("/{id}")
     public ResponseEntity<Rating> getRatingById(@PathVariable Long id) {
         return ratingRepository.findById(id)
@@ -36,7 +29,12 @@ public class RatingController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // PUT to update a rating
+    @PostMapping
+    public Rating addRating(@RequestBody Rating rating) {
+        rating.calculateOverall();
+        return ratingRepository.save(rating);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Rating> updateRating(@PathVariable Long id, @RequestBody Rating updatedRating) {
         return ratingRepository.findById(id).map(rating -> {
@@ -50,18 +48,28 @@ public class RatingController {
             rating.setProductionDesign(updatedRating.getProductionDesign());
             rating.setCasting(updatedRating.getCasting());
             rating.setEffects(updatedRating.getEffects());
-            rating.setMovie(updatedRating.getMovie());
+            rating.calculateOverall();
+
+            if (updatedRating.getMovie() != null) {
+                rating.setMovie(updatedRating.getMovie());
+            }
+
             ratingRepository.save(rating);
             return ResponseEntity.ok(rating);
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE a rating
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRating(@PathVariable Long id) {
-        return ratingRepository.findById(id).map(rating -> {
-            ratingRepository.delete(rating);
-            return ResponseEntity.ok().<Void>build();
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> deleteRating(@PathVariable Long id) {
+        return ratingRepository.findById(id)
+                .map(rating -> {
+                    Movie movie = rating.getMovie();
+                    if (movie != null) {
+                        movie.setRating(null); // detach
+                    }
+                    ratingRepository.delete(rating);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }
