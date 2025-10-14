@@ -1,5 +1,6 @@
 package org.launchcode.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -26,6 +27,7 @@ public class Movie {
     private Genre genre;
 
     @OneToOne(mappedBy = "movie", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Rating rating;
 
     // --- Constructors ---
