@@ -33,8 +33,13 @@ public class Movie {
     public void setPosterUrl(String posterUrl) { this.posterUrl = posterUrl; }
     public Genre getGenre() { return genre; }
     public void setGenre(Genre genre) { this.genre = genre; }
+
     public Rating getRating() { return rating; }
+
     public void setRating(Rating rating) {
+        if (this.rating != null) {
+            this.rating.setMovie(null); // detach old rating
+        }
         this.rating = rating;
         if (rating != null) {
             rating.setMovie(this); // maintain bidirectional link

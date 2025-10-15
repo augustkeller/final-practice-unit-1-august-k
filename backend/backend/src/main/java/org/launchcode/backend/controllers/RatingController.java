@@ -1,6 +1,5 @@
 package org.launchcode.backend.controllers;
 
-import org.launchcode.backend.models.Movie;
 import org.launchcode.backend.models.Rating;
 import org.launchcode.backend.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +16,13 @@ public class RatingController {
     @Autowired
     private RatingRepository ratingRepository;
 
+    // GET all ratings
     @GetMapping
     public List<Rating> getAllRatings() {
         return ratingRepository.findAll();
     }
 
+    // GET rating by ID
     @GetMapping("/{id}")
     public ResponseEntity<Rating> getRatingById(@PathVariable Long id) {
         return ratingRepository.findById(id)
@@ -29,12 +30,7 @@ public class RatingController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public Rating addRating(@RequestBody Rating rating) {
-        rating.calculateOverall();
-        return ratingRepository.save(rating);
-    }
-
+    // PUT to update a rating
     @PutMapping("/{id}")
     public ResponseEntity<Rating> updateRating(@PathVariable Long id, @RequestBody Rating updatedRating) {
         return ratingRepository.findById(id).map(rating -> {
@@ -49,23 +45,19 @@ public class RatingController {
             rating.setCasting(updatedRating.getCasting());
             rating.setEffects(updatedRating.getEffects());
             rating.calculateOverall();
-
-            if (updatedRating.getMovie() != null) {
-                rating.setMovie(updatedRating.getMovie());
-            }
-
             ratingRepository.save(rating);
             return ResponseEntity.ok(rating);
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    // DELETE a rating
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRating(@PathVariable Long id) {
         return ratingRepository.findById(id)
                 .map(rating -> {
-                    Movie movie = rating.getMovie();
-                    if (movie != null) {
-                        movie.setRating(null); // detach
+                    // detach from movie before deletion
+                    if (rating.getMovie() != null) {
+                        rating.getMovie().setRating(null);
                     }
                     ratingRepository.delete(rating);
                     return ResponseEntity.noContent().build();

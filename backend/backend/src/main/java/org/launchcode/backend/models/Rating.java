@@ -23,7 +23,7 @@ public class Rating {
     private double overall;
 
     @OneToOne
-    @JoinColumn(name = "movie_id", nullable = true)
+    @JoinColumn(name = "movie_id", nullable = false, unique = true)
     @JsonIgnoreProperties("rating")
     private Movie movie;
 
@@ -53,7 +53,16 @@ public class Rating {
     public double getOverall() { return overall; }
 
     public Movie getMovie() { return movie; }
-    public void setMovie(Movie movie) { this.movie = movie; }
+
+    public void setMovie(Movie movie) {
+        if (this.movie != null && this.movie.getRating() == this) {
+            this.movie.setRating(null); // detach old link
+        }
+        this.movie = movie;
+        if (movie != null && movie.getRating() != this) {
+            movie.setRating(this); // maintain bidirectional link
+        }
+    }
 
     // Public method to calculate overall
     public void calculateOverall() {

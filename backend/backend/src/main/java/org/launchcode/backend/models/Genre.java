@@ -1,7 +1,10 @@
 package org.launchcode.backend.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Genre {
@@ -10,15 +13,17 @@ public class Genre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Genre name is required")
     private String name;
 
-    // Constructors
-    public Genre() {}
-    public Genre(String name) { this.name = name; }
+    // One genre can have many movies
+    @OneToMany(mappedBy = "genre")
+    @JsonIgnoreProperties("genre")
+    private List<Movie> movies = new ArrayList<>();
 
     // Getters and setters
     public Long getId() { return id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+    public List<Movie> getMovies() { return movies; }
+    public void setMovies(List<Movie> movies) { this.movies = movies; }
 }
