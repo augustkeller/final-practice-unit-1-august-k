@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/movies")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 public class MovieController {
 
     @Autowired
@@ -40,52 +40,61 @@ public class MovieController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST a new movie (genre optional)
+    // POST a new movie (with optional rating)
     @PostMapping
     public Movie addMovie(@RequestBody Movie movie) {
-        // Ensure genre exists if provided
+        // Set genre if provided
         if (movie.getGenre() != null && movie.getGenre().getId() != null) {
             genreRepository.findById(movie.getGenre().getId()).ifPresent(movie::setGenre);
         } else {
             movie.setGenre(null);
         }
+
+        // Handle optional rating
+        Rating rating = movie.getRating();
+        if (rating != null) {
+            rating.setMovie(movie);      // maintain bidirectional link
+            rating.calculateOverall();   // calculate overall score
+        }
+
+        // Save movie (and rating if present)
         return movieRepository.save(movie);
     }
 
-    // PUT to update a movie (including assigning a genre later)
+    // PUT to update a movie
     @PutMapping("/{id}")
     public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody Movie updatedMovie) {
-        return movieRepository.findById(id).map(movie -> {
-            movie.setTitle(updatedMovie.getTitle());
-            movie.setYear(updatedMovie.getYear());
-            movie.setPosterUrl(updatedMovie.getPosterUrl());
+        return movieRepository.findById(id)
+                .map(movie -> {
+                    movie.setTitle(updatedMovie.getTitle());
+                    movie.setYear(updatedMovie.getYear());
+                    movie.setPosterUrl(updatedMovie.getPosterUrl());
 
-            if (updatedMovie.getGenre() != null && updatedMovie.getGenre().getId() != null) {
-                genreRepository.findById(updatedMovie.getGenre().getId())
-                        .ifPresent(movie::setGenre);
-            } else {
-                movie.setGenre(null);
-            }
+                    if (updatedMovie.getGenre() != null && updatedMovie.getGenre().getId() != null) {
+                        genreRepository.findById(updatedMovie.getGenre().getId())
+                                .ifPresent(movie::setGenre);
+                    } else {
+                        movie.setGenre(null);
+                    }
 
-            Movie saved = movieRepository.save(movie);
-            return ResponseEntity.ok(saved);
-        }).orElse(ResponseEntity.notFound().build());
+                    return ResponseEntity.ok(movieRepository.save(movie));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // DELETE a movie and its rating
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMovie(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteMovie(@PathVariable Long id) {
         return movieRepository.findById(id)
                 .map(movie -> {
-                    // Delete associated rating if it exists
                     Rating rating = movie.getRating();
                     if (rating != null) {
                         ratingRepository.delete(rating);
                     }
                     movieRepository.delete(movie);
-                    return ResponseEntity.noContent().build();
+                    return ResponseEntity.<Void>noContent().build();
                 })
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.<Void>notFound().build());
     }
 
     // POST a rating for a specific movie
@@ -96,10 +105,53 @@ public class MovieController {
                     rating.setMovie(movie);
                     rating.calculateOverall();
                     Rating saved = ratingRepository.save(rating);
-                    movie.setRating(saved); // maintain bidirectional link
+                    movie.setRating(saved);
                     movieRepository.save(movie);
                     return ResponseEntity.ok(saved);
                 })
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.<Rating>notFound().build());
+    }
+
+    // PUT (update) a rating for a specific movie
+    @PutMapping("/{movieId}/rating")
+    public ResponseEntity<Rating> updateRatingForMovie(@PathVariable Long movieId, @RequestBody Rating updatedRating) {
+        return (ResponseEntity<Rating>) movieRepository.findById(movieId)
+                .map(movie -> {
+                    Rating existingRating = movie.getRating();
+                    if (existingRating == null) {
+                        return ResponseEntity.<Rating>notFound().build();
+                    }
+
+                    existingRating.setWriting(updatedRating.getWriting());
+                    existingRating.setDirection(updatedRating.getDirection());
+                    existingRating.setActing(updatedRating.getActing());
+                    existingRating.setSound(updatedRating.getSound());
+                    existingRating.setEffects(updatedRating.getEffects());
+                    existingRating.setEditing(updatedRating.getEditing());
+                    existingRating.setCinematography(updatedRating.getCinematography());
+                    existingRating.setSoundtrack(updatedRating.getSoundtrack());
+                    existingRating.setProductionDesign(updatedRating.getProductionDesign());
+                    existingRating.setCasting(updatedRating.getCasting());
+                    existingRating.calculateOverall();
+
+                    return ResponseEntity.ok(ratingRepository.save(existingRating));
+                })
+                .orElse(ResponseEntity.<Rating>notFound().build());
+    }
+
+    // DELETE a rating for a specific movie
+    @DeleteMapping("/{movieId}/rating")
+    public ResponseEntity<Object> deleteRatingFromMovie(@PathVariable Long movieId) {
+        return movieRepository.findById(movieId)
+                .map(movie -> {
+                    Rating rating = movie.getRating();
+                    if (rating != null) {
+                        movie.setRating(null);
+                        ratingRepository.delete(rating);
+                        movieRepository.save(movie);
+                    }
+                    return ResponseEntity.<Void>noContent().build();
+                })
+                .orElse(ResponseEntity.<Void>notFound().build());
     }
 }
