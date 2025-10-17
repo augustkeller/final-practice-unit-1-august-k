@@ -23,6 +23,24 @@ public class Movie {
     @JsonIgnoreProperties("movie")
     private Rating rating;
 
+    @Column(length = 2000)
+    private String description;
+
+    @Column(length = 1000)
+    private String boxOffice;
+
+    @Column(length = 2000)
+    private String awards;
+
+    public Movie() {}
+
+    public Movie(String title, Long genreId, int year, String posterUrl) {
+        this.title = title;
+        this.year = year;
+        this.posterUrl = posterUrl;
+        // You can later set genre by looking up genreId
+    }
+
     // --- Getters and Setters ---
     public Long getId() { return id; }
 
@@ -47,4 +65,13 @@ public class Movie {
             rating.setMovie(this); // maintain one-directional link only
         }
     }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public String getBoxOffice() { return boxOffice; }
+    public void setBoxOffice(String boxOffice) { this.boxOffice = boxOffice; }
+
+    public String getAwards() { return awards; }
+    public void setAwards(String awards) { this.awards = awards; }
 }

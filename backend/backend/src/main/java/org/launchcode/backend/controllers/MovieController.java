@@ -1,5 +1,6 @@
 package org.launchcode.backend.controllers;
 
+import org.launchcode.backend.dto.MovieDTO;
 import org.launchcode.backend.models.Movie;
 import org.launchcode.backend.models.Rating;
 import org.launchcode.backend.models.Genre;
@@ -9,6 +10,7 @@ import org.launchcode.backend.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.launchcode.backend.services.MovieService;
 
 import java.util.List;
 
@@ -16,6 +18,13 @@ import java.util.List;
 @RequestMapping("/api/movies")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MovieController {
+
+    private final MovieService movieService;
+
+    @Autowired
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
+    }
 
     @Autowired
     private MovieRepository movieRepository;
@@ -153,5 +162,11 @@ public class MovieController {
                     return ResponseEntity.<Void>noContent().build();
                 })
                 .orElse(ResponseEntity.<Void>notFound().build());
+    }
+
+    @PostMapping("/ai")
+    public ResponseEntity<Movie> addMovieWithAI(@RequestBody MovieDTO dto) {
+        Movie saved = movieService.addMovie(dto);
+        return ResponseEntity.ok(saved);
     }
 }
