@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.launchcode.backend.services.MovieService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/movies")
@@ -168,5 +170,71 @@ public class MovieController {
     public ResponseEntity<Movie> addMovieWithAI(@RequestBody MovieDTO dto) {
         Movie saved = movieService.addMovie(dto);
         return ResponseEntity.ok(saved);
+    }
+
+    @PutMapping("/ai/{id}")
+    public ResponseEntity<Movie> updateMovieWithAI(@PathVariable Long id) {
+        return movieRepository.findById(id)
+                .map(movie -> {
+                    // Generate AI content
+                    String desc = movieService.generateDescription(movie.getTitle());
+                    String box = movieService.generateBoxOffice(movie.getTitle());
+                    String awards = movieService.generateAwards(movie.getTitle());
+
+                    // Update movie fields
+                    movie.setDescription(desc);
+                    movie.setBoxOffice(box);
+                    movie.setAwards(awards);
+
+                    Movie saved = movieRepository.save(movie);
+                    return ResponseEntity.ok(saved);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // --- READ ALL (AI GENERATIONS) ---
+    @GetMapping("/ai")
+    public ResponseEntity<List<Movie>> getAllAIMovies() {
+        List<Movie> movies = movieRepository.findAll()
+                .stream()
+                .filter(m -> m.getDescription() != null || m.getBoxOffice() != null || m.getAwards() != null)
+                .toList();
+        return ResponseEntity.ok(movies);
+    }
+
+    // --- READ ONE (AI GENERATION by ID) ---
+    @GetMapping("/ai/{id}")
+    public ResponseEntity<Map<String, Object>> getAIMovieById(@PathVariable Long id) {
+        return (ResponseEntity<Map<String, Object>>) movieRepository.findById(id)
+                .map(movie -> {
+                    // Return 404 if AI generations are missing
+                    if (movie.getDescription() == null &&
+                            movie.getBoxOffice() == null &&
+                            movie.getAwards() == null) {
+                        return ResponseEntity.status(404)
+                                .body(Map.of("error", "AI data not found for movie ID: " + id));
+                    }
+
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("message", "AI movie data retrieved successfully.");
+                    response.put("movie", movie);
+                    return ResponseEntity.ok(response);
+                })
+                .orElse(ResponseEntity.status(404)
+                        .body(Map.of("error", "Movie not found with ID: " + id)));
+    }
+
+    // --- DELETE (Remove AI data but keep movie) ---
+    @DeleteMapping("/ai/{id}")
+    public ResponseEntity<Movie> deleteAIGeneration(@PathVariable Long id) {
+        return movieRepository.findById(id)
+                .map(movie -> {
+                    movie.setDescription(null);
+                    movie.setBoxOffice(null);
+                    movie.setAwards(null);
+                    Movie saved = movieRepository.save(movie);
+                    return ResponseEntity.ok(saved);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }
