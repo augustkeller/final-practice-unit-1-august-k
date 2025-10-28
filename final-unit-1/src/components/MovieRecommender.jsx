@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import allMovies from "./AllMovies";
+import { useAllMovies } from "./AllMovies";
 import CategorySelector from "./CategorySelector";
 import GenreSelector from "./GenreSelector";
 import YearSelector from "./YearSelector";
 
 function MovieRecommender() {
     const navigate = useNavigate(); //The navigate function can be called with the target path as an argument.
+
+    const { movies: allMovies, loading, error } = useAllMovies();
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error loading movies: {error}</div>;
+    if (!allMovies || allMovies.length === 0) return <div>No movies available</div>;
 
 
     const years = allMovies.map(m => m.Year);
