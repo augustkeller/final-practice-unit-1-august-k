@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAllMovies } from "./AllMovies";
 import CategorySelector from "./CategorySelector";
@@ -6,67 +6,100 @@ import GenreSelector from "./GenreSelector";
 import YearSelector from "./YearSelector";
 
 function MovieRecommender() {
-    const navigate = useNavigate(); //The navigate function can be called with the target path as an argument.
+    const navigate = useNavigate();
+    const { movies: allMovies, loading, error } = useAllMovies(); //fetch movies from backend
 
-    const { movies: allMovies, loading, error } = useAllMovies();
+    //Declare all hooks BEFORE any conditional returns
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedGenre, setSelectedGenre] = useState("");
+    const [valueOldest, setValueOldest] = useState(1888);
+    const [valueNewest, setValueNewest] = useState(2100);
 
-    if (loading) return <div>Loading...</div>;
+    //Update year range when movies load
+    useEffect(() => {
+        if (allMovies && allMovies.length > 0) {
+            const years = allMovies.map(m => m.year); // lowercase 'year' from backend
+            setValueOldest(Math.min(...years));
+            setValueNewest(Math.max(...years));
+        }
+    }, [allMovies]);
+
+    //Conditional returns AFTER hooks
+    if (loading) return <div>Loading movies...</div>;
     if (error) return <div>Error loading movies: {error}</div>;
     if (!allMovies || allMovies.length === 0) return <div>No movies available</div>;
 
-
-    const years = allMovies.map(m => m.Year);
+    const years = allMovies.map(m => m.year);
     const minYear = Math.min(...years);
     const maxYear = Math.max(...years);
-
-    const [selectedCategories, setSelectedCategories] = useState([]);
-    const [selectedGenre, setSelectedGenre] = useState("");
-    const [valueOldest, setValueOldest] = useState(minYear);
-    const [valueNewest, setValueNewest] = useState(maxYear);
 
     function handleFilterClick(event) {
         event.preventDefault();
 
         const filtered = allMovies
             .filter(movie =>
-                (!selectedGenre || movie.Genre === selectedGenre) &&
-                movie.Year >= valueOldest &&
-                movie.Year <= valueNewest
-            ) //checks if no genres are selected, then filters by selected genres. Then filters by set years.
+                //checks if no genres are selected, then filters by selected genres
+                (!selectedGenre || movie.genre?.name === selectedGenre) &&
+                movie.year >= valueOldest &&
+                movie.year <= valueNewest
+            )
             .sort((a, b) => {
-                const titleA = (a.Title || "").toString().toUpperCase();
-                const titleB = (b.Title || "").toString().toUpperCase();
-
+                //sort alphabetically by title
+                const titleA = (a.title || "").toString().toUpperCase();
+                const titleB = (b.title || "").toString().toUpperCase();
                 if (titleA < titleB) return -1;
                 if (titleA > titleB) return 1;
-
                 return 0;
-            }) //sort alphabetically
-            .sort((a,b) => {
-                return b.Average - a.Average;
-            }) //sort by overall average
+            })
             .sort((a, b) => {
-                const hasCategory = selectedCategories.length > 0 && !selectedCategories.includes("Overall");
-                const avgA = hasCategory ? computeAverage(a, selectedCategories) : a.Average;
-                const avgB = hasCategory ? computeAverage(b, selectedCategories) : b.Average;
-
+                //sort by overall average rating
+                const avgA = a.rating?.overall || 0;
+                const avgB = b.rating?.overall || 0;
                 return avgB - avgA;
-            }); //sort by selected categories average or by overall average again if not categories are selected.
+            })
+            .sort((a, b) => {
+                // sort by selected category averages, or overall average if none are selected
+                const hasCategory = selectedCategories.length > 0 && !selectedCategories.includes("Overall");
+                const avgA = hasCategory ? computeAverage(a, selectedCategories) : (a.rating?.overall || 0);
+                const avgB = hasCategory ? computeAverage(b, selectedCategories) : (b.rating?.overall || 0);
+                return avgB - avgA;
+            });
 
+        //navigate to results page and pass filtered data
         navigate("/Results", { state: { movies: filtered, categories: selectedCategories } });
-    } //The navigate function can be called with the target path as an argument. Also passing data.
+    }
 
     function computeAverage(movie, categories) {
+        if (!movie.rating) return 0;
         if (categories.includes("Overall") || categories.length === 0) {
-            return movie.Average ?? 0;
+            return movie.rating.overall ?? 0;
         }
-        const total = categories.reduce((sum, category) => sum + movie[category], 0);
+
+        //Map display category names to backend field names
+        const categoryMap = {
+            "Writing": "writing",
+            "Direction": "direction",
+            "Cinematography": "cinematography",
+            "Acting": "acting",
+            "Editing": "editing",
+            "Sound": "sound",
+            "Score/Soundtrack": "soundtrack",
+            "Production Design": "productionDesign",
+            "Casting": "casting",
+            "Effects": "effects"
+        };
+
+        //computes average value of selected categories
+        const total = categories.reduce((sum, category) => {
+            const fieldName = categoryMap[category];
+            return sum + (movie.rating[fieldName] || 0);
+        }, 0);
+
         return total / categories.length;
-    } //computes average value of selected categories.
+    }
 
     return (
         <form className="movie-filter" onSubmit={handleFilterClick}>
-
             <CategorySelector
                 selectedCategories={selectedCategories}
                 setSelectedCategories={setSelectedCategories}
