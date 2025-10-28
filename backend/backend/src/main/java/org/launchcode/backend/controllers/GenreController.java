@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/genres")
-@CrossOrigin(origins = "*")
 public class GenreController {
 
     @Autowired
