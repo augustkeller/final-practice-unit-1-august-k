@@ -1,24 +1,42 @@
+import { useState, useEffect } from 'react';
+
 function GenreSelector(props) {
-    function HandleChange(event) {
+    const [genres, setGenres] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // Fetch genres from backend
+    useEffect(() => {
+        async function fetchGenres() {
+            try {
+                const response = await fetch('http://localhost:8080/api/genres');
+                if (!response.ok) throw new Error('Failed to fetch genres');
+                const data = await response.json();
+                setGenres(data);
+            } catch (error) {
+                console.error('Error fetching genres:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchGenres();
+    }, []);
+
+    function handleChange(event) {
         props.setSelectedGenre(event.target.value);
     }
+
+    if (loading) return <div>Loading genres...</div>;
 
     return (
         <div className="genre-selector">
             <h2>Preferred Genre</h2>
-            <select value={props.selectedGenre} onChange={HandleChange}>
+            <select value={props.selectedGenre} onChange={handleChange}>
                 <option value="">---Select---</option>
-                <option value="Action">Action</option>
-                <option value="Comedy">Comedy</option>
-                <option value="Drama">Drama</option>
-                <option value="Thriller">Thriller</option>
-                <option value="Sci-Fi">Sci-Fi</option>
-                <option value="Musical">Musical</option>
-                <option value="Horror">Horror</option>
-                <option value="Fantasy">Fantasy</option>
-                <option value="Animation">Animation</option>
-                <option value="Adventure">Adventure</option>
-                <option value="Documentary">Documentary</option>
+                {genres.map(genre => (
+                    <option key={genre.id} value={genre.name}>
+                        {genre.name}
+                    </option>
+                ))}
             </select>
         </div>
     );
