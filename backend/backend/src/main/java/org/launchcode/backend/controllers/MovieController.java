@@ -1,4 +1,5 @@
 package org.launchcode.backend.controllers;
+import java.util.concurrent.TimeUnit;
 
 import org.launchcode.backend.dto.MovieDTO;
 import org.launchcode.backend.models.Movie;
@@ -189,6 +190,51 @@ public class MovieController {
                     return ResponseEntity.ok(saved);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/ai/bulk")
+    public ResponseEntity<String> bulkUpdateAIWithDelay() {
+        List<Movie> allMovies = movieRepository.findAll();
+        int successCount = 0;
+        int batchSize = 5;         // Number of movies to process before pausing
+        long delayMillis = 60000;   // 1-minute delay between batches
+
+        for (int i = 0; i < allMovies.size(); i++) {
+            Movie movie = allMovies.get(i);
+            try {
+                // Generate AI content
+                String desc = movieService.generateDescription(movie.getTitle());
+                String box = movieService.generateBoxOffice(movie.getTitle());
+                String awards = movieService.generateAwards(movie.getTitle());
+
+                // Only update if the AI actually returned real content
+                if (!"Description unavailable.".equals(desc)) {
+                    movie.setDescription(desc);
+                }
+                if (!"Box office data unavailable.".equals(box)) {
+                    movie.setBoxOffice(box);
+                }
+                if (!"Awards information unavailable.".equals(awards)) {
+                    movie.setAwards(awards);
+                }
+
+                movieRepository.save(movie);
+                successCount++;
+            } catch (Exception e) {
+                System.err.println("Failed for movie ID " + movie.getId() + ": " + e.getMessage());
+            }
+
+            // Pause after each batch
+            if ((i + 1) % batchSize == 0) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(delayMillis);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+
+        return ResponseEntity.ok("AI generation complete. Success for " + successCount + "/" + allMovies.size() + " movies.");
     }
 
     // --- READ ALL (AI GENERATIONS) ---

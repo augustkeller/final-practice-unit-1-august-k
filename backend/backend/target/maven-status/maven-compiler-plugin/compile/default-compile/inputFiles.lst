@@ -1,0 +1,15 @@
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\BackendApplication.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\config\WebConfig.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\controllers\GenreController.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\controllers\MovieController.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\controllers\RatingController.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\dto\MovieDTO.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\exceptions\GlobalExceptionHandler.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\exceptions\ResourceNotFoundException.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\models\Genre.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\models\Movie.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\models\Rating.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\repositories\GenreRepository.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\repositories\MovieRepository.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\repositories\RatingRepository.java
+C:\Users\guske\MyFirstProject\final-practice-unit-1-august-k\backend\backend\src\main\java\org\launchcode\backend\services\MovieService.java
