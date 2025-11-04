@@ -89,19 +89,19 @@ function RandomMovieGenerator() {
         }
     }
 
-    // --- Delete comment ---
-    async function handleDeleteComment(id) {
-        try {
-            const res = await fetch(`http://localhost:8080/api/comments/${id}`, {
-                method: "DELETE",
-            });
-            if (res.ok) {
-                setComments(prev => prev.filter(c => c.id !== id));
-            }
-        } catch (err) {
-            console.error("Error deleting comment:", err);
+// --- Delete comment ---
+async function handleDeleteComment(commentId) {
+    try {
+        const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+            method: "DELETE",
+        });
+        if (res.ok) {
+            setComments(prev => prev.filter(c => c.id !== commentId));
         }
+    } catch (err) {
+        console.error("Error deleting comment:", err);
     }
+}
 
     // --- Set initial movie ---
     useEffect(() => {
