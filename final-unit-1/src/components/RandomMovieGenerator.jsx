@@ -40,6 +40,51 @@ function RandomMovieGenerator() {
         }
     }
 
+    // simple comment form component
+    function CommentForm({ movieId, onCommentAdded }) {
+        const [content, setContent] = useState("");
+        const username = "August"; // Replace with actual logged-in user
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const res = await fetch(`http://localhost:8080/api/comments/movie/${movieId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, content })
+            });
+            if (res.ok) {
+                const newComment = await res.json();
+                onCommentAdded(newComment);
+                setContent("");
+            }
+        }
+
+        return (
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    value={content}
+                    onChange={e => setContent(e.target.value)}
+                    placeholder="Add a comment"
+                />
+                <button type="submit">Submit</button>
+            </form>
+        );
+    }
+
+    // handle deleting a comment
+    async function handleDelete(commentId) {
+        const res = await fetch(`http://localhost:8080/api/comments/${commentId}?username=August`, {
+            method: "DELETE"
+        });
+        if (res.ok) {
+            setRandomMovie(prev => ({
+                ...prev,
+                comments: prev.comments.filter(c => c.id !== commentId)
+            }));
+        }
+    }
+
     // Set initial random movie once movies are loaded
     useEffect(() => {
         if (allMovies && allMovies.length > 0) {
@@ -79,6 +124,33 @@ function RandomMovieGenerator() {
             <button onClick={handleGenerateAI} disabled={loadingAI}>
                 {loadingAI ? "Generating..." : "Generate AI Info"}
             </button>
+
+            {/* COMMENTS SECTION */}
+            <div style={{ marginTop: "20px" }}>
+                <h3>Comments:</h3>
+                {randomMovie.comments?.length === 0 ? (
+                    <p>No comments yet.</p>
+                ) : (
+                    randomMovie.comments.map((c) => (
+                        <div key={c.id} style={{ marginBottom: "8px" }}>
+                            <b>{c.username}:</b> {c.content}{" "}
+                            {c.username === "August" && (
+                                <button onClick={() => handleDelete(c.id)}>Delete</button>
+                            )}
+                        </div>
+                    ))
+                )}
+
+                <CommentForm
+                    movieId={randomMovie.id}
+                    onCommentAdded={(newComment) =>
+                        setRandomMovie((prev) => ({
+                            ...prev,
+                            comments: [...(prev.comments || []), newComment],
+                        }))
+                    }
+                />
+            </div>
         </div>
     );
 }
