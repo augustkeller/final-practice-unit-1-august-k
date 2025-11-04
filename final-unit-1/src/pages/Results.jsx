@@ -1,12 +1,13 @@
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Results() {
     const location = useLocation();
-    const { movies: initialMovies, categories } = location.state || { movies: [], categories: [] }; // pull out movies and categories from location.state. rename the movies variable to initialMovies.
+    const { movies: initialMovies, categories } = location.state || { movies: [], categories: [] };
 
     const [movies, setMovies] = useState(initialMovies);
-    const [loadingId, setLoadingId] = useState(null); // track which movie is currently generating AI data.
+    const [loadingId, setLoadingId] = useState(null); // track which movie is currently generating AI data
+    const [commentInputs, setCommentInputs] = useState({}); // track new comment input per movie
 
     function handleDelete(indexToRemove) {
         setMovies(prevMovies => prevMovies.filter((_, i) => i !== indexToRemove));
@@ -14,7 +15,7 @@ function Results() {
 
     async function handleGenerateAI(movieId) {
         try {
-            setLoadingId(movieId); // show which movie is currently being updated.
+            setLoadingId(movieId); // show which movie is currently being updated
             const res = await fetch(`http://localhost:8080/api/movies/ai/${movieId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -24,7 +25,7 @@ function Results() {
                 const updatedMovie = await res.json();
                 setMovies(prevMovies =>
                     prevMovies.map(m => (m.id === movieId ? updatedMovie : m))
-                ); // update the state with the AI-enhanced movie data.
+                ); // update the state with the AI-enhanced movie data
                 alert(`AI content generated for "${updatedMovie.title}"`);
             } else {
                 alert(`Failed to generate AI content for movie ID ${movieId}`);
@@ -33,14 +34,14 @@ function Results() {
             console.error("Error generating AI content:", err);
             alert("Error generating AI content. Check console for details.");
         } finally {
-            setLoadingId(null); // reset loading state once done.
+            setLoadingId(null); // reset loading state once done
         }
     }
 
     function getCategoryScores(movie) {
         if (categories.length === 0 || categories.includes("Overall")) {
             return `Overall Score: ${movie.rating?.overall || 'N/A'}`;
-        } // checks if no categories or overall category was selected.
+        } // checks if no categories or overall category was selected
 
         // Map display names to backend field names
         const categoryMap = {
@@ -62,7 +63,69 @@ function Results() {
                 const score = movie.rating?.[fieldName] || 'N/A';
                 return `${cat}: ${score}`;
             })
-            .join(", "); // maps the selected categories and their accompanying scores.
+            .join(", "); // maps the selected categories and their accompanying scores
+    }
+
+    // --- Fetch comments for a single movie ---
+    async function fetchComments(movieId) {
+        try {
+            const res = await fetch(`http://localhost:8080/api/comments/movie/${movieId}`);
+            if (res.ok) {
+                const data = await res.json();
+                setMovies(prevMovies =>
+                    prevMovies.map(m => (m.id === movieId ? { ...m, comments: data } : m))
+                );
+            }
+        } catch (err) {
+            console.error("Error fetching comments:", err);
+        }
+    }
+
+    // --- Add a comment ---
+    async function handleAddComment(e, movieId) {
+        e.preventDefault();
+        const content = commentInputs[movieId]?.trim();
+        if (!content) return;
+
+        try {
+            const username = "Guest"; // replace with actual logged-in user if applicable
+            const res = await fetch(`http://localhost:8080/api/comments/movie/${movieId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, content })
+            });
+            if (res.ok) {
+                const newComment = await res.json();
+                setMovies(prevMovies =>
+                    prevMovies.map(m =>
+                        m.id === movieId ? { ...m, comments: [...(m.comments || []), newComment] } : m
+                    )
+                );
+                setCommentInputs(prev => ({ ...prev, [movieId]: "" }));
+            }
+        } catch (err) {
+            console.error("Error adding comment:", err);
+        }
+    }
+
+    // --- Delete a comment ---
+    async function handleDeleteComment(commentId, movieId) {
+        try {
+            const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+                method: "DELETE"
+            });
+            if (res.ok) {
+                setMovies(prevMovies =>
+                    prevMovies.map(m =>
+                        m.id === movieId
+                            ? { ...m, comments: m.comments.filter(c => c.id !== commentId) }
+                            : m
+                    )
+                );
+            }
+        } catch (err) {
+            console.error("Error deleting comment:", err);
+        }
     }
 
     return (
@@ -70,7 +133,7 @@ function Results() {
             <h1>Personalized Recommendations</h1>
 
             {movies.length === 0 ? (
-                <p>No movie recommendations left. Please adjust your preferences.</p> // catch if results return no movies.
+                <p>No movie recommendations left. Please adjust your preferences.</p>
             ) : (
                 <ol>
                     {movies.slice(0, 5).map((movie, index) => (
@@ -80,6 +143,7 @@ function Results() {
                             <img 
                                 src={movie.posterUrl}
                                 alt={`Poster for ${movie.title}`}
+                                style={{ width: "150px", height: "auto", borderRadius: "4px" }}
                             />
                             <br />
 
@@ -102,6 +166,42 @@ function Results() {
                             >
                                 {loadingId === movie.id ? "Generating..." : "Generate AI Info"}
                             </button>
+
+                            {/* --- COMMENTS SECTION --- */}
+                            <div style={{ marginTop: "10px" }}>
+                                <h4>Comments:</h4>
+                                {(!movie.comments || movie.comments.length === 0) ? (
+                                    <p>No comments yet — be the first to add one!</p>
+                                ) : (
+                                    <ul>
+                                        {movie.comments.map(comment => (
+                                            <li key={comment.id}>
+                                                <strong>{comment.username}:</strong> {comment.content}
+                                                <button
+                                                    style={{ marginLeft: "8px" }}
+                                                    onClick={() => handleDeleteComment(comment.id, movie.id)}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+
+                                <form onSubmit={(e) => handleAddComment(e, movie.id)} style={{ marginTop: "5px" }}>
+                                    <input
+                                        type="text"
+                                        value={commentInputs[movie.id] || ""}
+                                        onChange={(e) =>
+                                            setCommentInputs(prev => ({ ...prev, [movie.id]: e.target.value }))
+                                        }
+                                        placeholder="Add a comment"
+                                        style={{ width: "200px", marginRight: "5px" }}
+                                    />
+                                    <button type="submit">Submit</button>
+                                </form>
+                            </div>
+
                         </li>
                     ))}
                 </ol>

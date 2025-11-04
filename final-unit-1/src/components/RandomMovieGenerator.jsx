@@ -5,8 +5,12 @@ import '../App.css';
 function RandomMovieGenerator() {
     const { movies: allMovies, loading, error } = useAllMovies();
     const [randomMovie, setRandomMovie] = useState(null);
-    const [loadingAI, setLoadingAI] = useState(false); // track AI generation
+    const [loadingAI, setLoadingAI] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState("");
+    const [username, setUsername] = useState("Guest");
 
+    // --- Get random movie ---
     function getRandomMovie() {
         if (!allMovies || allMovies.length === 0) return null;
         const randomIndex = Math.floor(Math.random() * allMovies.length);
@@ -17,6 +21,7 @@ function RandomMovieGenerator() {
         setRandomMovie(getRandomMovie());
     }
 
+    // --- Generate AI info ---
     async function handleGenerateAI() {
         if (!randomMovie) return;
         try {
@@ -28,7 +33,7 @@ function RandomMovieGenerator() {
 
             if (res.ok) {
                 const updatedMovie = await res.json();
-                setRandomMovie(updatedMovie); // update with AI data
+                setRandomMovie(updatedMovie);
             } else {
                 alert(`Failed to generate AI content for "${randomMovie.title}"`);
             }
@@ -40,61 +45,74 @@ function RandomMovieGenerator() {
         }
     }
 
-    // simple comment form component
-    function CommentForm({ movieId, onCommentAdded }) {
-        const [content, setContent] = useState("");
-        const username = "August"; // Replace with actual logged-in user
-
-        async function handleSubmit(e) {
-            e.preventDefault();
-            const res = await fetch(`http://localhost:8080/api/comments/movie/${movieId}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, content })
-            });
-            if (res.ok) {
-                const newComment = await res.json();
-                onCommentAdded(newComment);
-                setContent("");
+    // --- Load comments for selected movie ---
+    useEffect(() => {
+        async function fetchComments() {
+            if (!randomMovie) return;
+            try {
+                const res = await fetch(`http://localhost:8080/api/comments/movie/${randomMovie.id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setComments(data);
+                }
+            } catch (err) {
+                console.error("Error loading comments:", err);
             }
         }
+        fetchComments();
+    }, [randomMovie]);
 
-        return (
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    value={content}
-                    onChange={e => setContent(e.target.value)}
-                    placeholder="Add a comment"
-                />
-                <button type="submit">Submit</button>
-            </form>
-        );
-    }
+    // --- Add comment ---
+    async function handleAddComment(e) {
+        e.preventDefault();
+        if (!newComment.trim()) return;
 
-    // handle deleting a comment
-    async function handleDelete(commentId) {
-        const res = await fetch(`http://localhost:8080/api/comments/${commentId}?username=August`, {
-            method: "DELETE"
-        });
-        if (res.ok) {
-            setRandomMovie(prev => ({
-                ...prev,
-                comments: prev.comments.filter(c => c.id !== commentId)
-            }));
+        try {
+            const res = await fetch(`http://localhost:8080/api/comments/movie/${randomMovie.id}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    content: newComment,
+                    username: username || "Guest"
+                }),
+            });
+
+            if (res.ok) {
+                const saved = await res.json();
+                setComments(prev => [...prev, saved]);
+                setNewComment("");
+            } else {
+                alert("Failed to post comment");
+            }
+        } catch (err) {
+            console.error("Error posting comment:", err);
         }
     }
 
-    // Set initial random movie once movies are loaded
+    // --- Delete comment ---
+    async function handleDeleteComment(id) {
+        try {
+            const res = await fetch(`http://localhost:8080/api/comments/${id}`, {
+                method: "DELETE",
+            });
+            if (res.ok) {
+                setComments(prev => prev.filter(c => c.id !== id));
+            }
+        } catch (err) {
+            console.error("Error deleting comment:", err);
+        }
+    }
+
+    // --- Set initial movie ---
     useEffect(() => {
         if (allMovies && allMovies.length > 0) {
             setRandomMovie(getRandomMovie());
         }
     }, [allMovies]);
 
+    // --- Conditional renders ---
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
-    if (!allMovies || allMovies.length === 0) return <div>No movies available</div>;
     if (!randomMovie) return <div>No movies available</div>;
 
     return (
@@ -106,6 +124,7 @@ function RandomMovieGenerator() {
                 <strong>Genre:</strong> {randomMovie.genre?.name || 'Unknown'}<br />
                 <strong>August's Score:</strong> {randomMovie.rating?.overall || 'N/A'}/10
             </p>
+
             <img 
                 src={randomMovie.posterUrl}
                 alt={`Poster for ${randomMovie.title}`}
@@ -119,37 +138,45 @@ function RandomMovieGenerator() {
                     <p><strong>Awards:</strong> {randomMovie.awards}</p>
                 </div>
             )}
+
             <br />
             <button onClick={handleClick}>Get Another Pick</button>{" "}
             <button onClick={handleGenerateAI} disabled={loadingAI}>
                 {loadingAI ? "Generating..." : "Generate AI Info"}
             </button>
 
-            {/* COMMENTS SECTION */}
+            {/* --- COMMENTS SECTION --- */}
             <div style={{ marginTop: "20px" }}>
-                <h3>Comments:</h3>
-                {randomMovie.comments?.length === 0 ? (
-                    <p>No comments yet.</p>
+                <h3>Comments</h3>
+
+                {comments.length === 0 ? (
+                    <p>No comments yet — be the first to add one!</p>
                 ) : (
-                    randomMovie.comments.map((c) => (
-                        <div key={c.id} style={{ marginBottom: "8px" }}>
-                            <b>{c.username}:</b> {c.content}{" "}
-                            {c.username === "August" && (
-                                <button onClick={() => handleDelete(c.id)}>Delete</button>
-                            )}
-                        </div>
-                    ))
+                    <ul>
+                        {comments.map(comment => (
+                            <li key={comment.id}>
+                                <strong>{comment.username}:</strong> {comment.content}
+                                <button
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={() => handleDeleteComment(comment.id)}
+                                >
+                                    Delete
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
                 )}
 
-                <CommentForm
-                    movieId={randomMovie.id}
-                    onCommentAdded={(newComment) =>
-                        setRandomMovie((prev) => ({
-                            ...prev,
-                            comments: [...(prev.comments || []), newComment],
-                        }))
-                    }
-                />
+                <form onSubmit={handleAddComment} style={{ marginTop: "10px" }}>
+                    <input
+                        type="text"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="Write a comment..."
+                        style={{ width: "250px", marginRight: "10px" }}
+                    />
+                    <button type="submit">Submit Comment</button>
+                </form>
             </div>
         </div>
     );
