@@ -1,7 +1,6 @@
 package org.launchcode.backend.controllers;
 
 import org.launchcode.backend.models.Comment;
-import org.launchcode.backend.models.Movie;
 import org.launchcode.backend.repositories.CommentRepository;
 import org.launchcode.backend.repositories.MovieRepository;
 import org.springframework.http.ResponseEntity;
@@ -37,17 +36,14 @@ public class CommentController {
         return ResponseEntity.ok(commentRepository.findByMovieId(movieId));
     }
 
-    // --- Delete a comment (only if username matches) ---
+    // --- Delete a comment ---
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long id, @RequestParam String username) {
-        return (ResponseEntity<Void>) commentRepository.findById(id).map(comment -> {
-            if (comment.getUsername().equals(username)) {
-                commentRepository.delete(comment);
-                return ResponseEntity.ok().<Void>build();
-            } else {
-                // Prevent deleting someone else’s comment
-                return ResponseEntity.status(403).build();
-            }
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+        return commentRepository.findById(id)
+                .map(comment -> {
+                    commentRepository.delete(comment);
+                    return ResponseEntity.ok().<Void>build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }
