@@ -85,7 +85,7 @@ Once both servers are running, visit `http://localhost:5173` in your browser.
 
 Here's what users can expect to see:
 
-![Homepage Screenshot](images/Screenshot 2025-11-10 134530.png)  
+![Homepage Screenshot](images/app-homepage.png)  
 *Example: Homepage displaying random movie recommendations.*
 
 ![Results Screenshot](images/results-placeholder.png)  
