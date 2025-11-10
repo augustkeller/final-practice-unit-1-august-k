@@ -6,15 +6,15 @@
 ---
 
 ## 📋 Table of Contents
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation & Setup](#installation--setup)
-- [Usage](#usage)
-- [Wireframes & ERD](#wireframes--erd)
-- [Unsolved Problems / Future Features](#unsolved-problems--future-features)
-- [Additional Content & Resources](#additional-content--resources)
-- [Acknowledgments](#acknowledgments)
+- [Project Overview](#-project-overview)
+- [Features](#-features)
+- [Technologies Used](#-technologies-used)
+- [Installation & Setup](#️-installation--setup)
+- [Usage](#️-usage)
+- [Wireframes & ERD](#-wireframes--erd)
+- [Unsolved Problems / Future Features](#-unsolved-problems--future-features)
+- [Additional Content & Resources](#-additional-content--resources)
+- [Acknowledgments](#-acknowledgments)
 
 ---
 
