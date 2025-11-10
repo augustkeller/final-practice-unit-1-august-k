@@ -56,7 +56,7 @@ This project demonstrates front-end React development, RESTful API integration, 
 To run the app locally:
 ```bash
 # 1️⃣ Clone the repository
-git clone https://github.com/augustkeller/movie-recommendations.git
+git clone https://github.com/augustkeller/final-practice-unit-1-august-k
 
 # 2️⃣ Navigate to the frontend folder
 cd frontend
