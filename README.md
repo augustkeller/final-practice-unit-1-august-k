@@ -1,7 +1,7 @@
 # 🎬 August's Movie Recommendations!
 **My LaunchCode Capstone**
 
-![App banner](https://drive.google.com/file/d/1vpS0cQVM4V0azpP-5NuEuEu72HA72ikU/view)
+![App banner](https://drive.google.com/file/d/12EkrDIYBu575wB1WioQ3SOFsDVYRVdn9/view?usp=sharing)
 
 ---
 
