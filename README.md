@@ -101,7 +101,7 @@ Here's what users can expect to see:
 ## 🧩 Wireframes & ERD
 
 ### Wireframe (UI Layout)
-![Wireframe Placeholder](images/wireframe-placeholder.png)  
+![Wireframe](images/Wireframing.png)  
 *Wireframe created in Figma showing core page structure.*
 
 ### Entity Relationship Diagram (ERD)
