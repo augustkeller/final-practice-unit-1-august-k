@@ -45,7 +45,7 @@ This project demonstrates front-end React development, RESTful API integration, 
 | **Backend** | Java, Spring Boot |
 | **Database** | MySQL |
 | **Styling** | CSS |
-| **Hosting** | Netlify (frontend) / Render (backend) |
+| **Hosting** | Netlify (frontend) |
 | **Version Control** | Git & GitHub |
 | **Other Tools** | Postman, Figma, Lucidchart |
 
@@ -129,7 +129,6 @@ Here's what users can expect to see:
 
 ### Deployment
 - [Netlify](https://www.netlify.com/) – Frontend hosting
-- [Render](https://render.com/) – Backend deployment
 
 ### Markdown References
 - [Markdown Guide: Basic Syntax](https://www.markdownguide.org/basic-syntax/)
