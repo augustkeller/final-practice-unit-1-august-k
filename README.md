@@ -21,7 +21,7 @@
 ## 🎥 Project Overview
 **August's Movie Recommendations** is a full-stack web application designed to help users discover new movies through AI-powered suggestions and creative search tools.  
 
-Users can generate random recommendations, filter by genre or mood, and explore detailed results in a visually appealing interface.  
+Users can generate random recommendations, filter by genre or filmmaking aspects, and explore detailed results in a visually appealing interface.  
 
 This project demonstrates front-end React development, RESTful API integration, and full-stack deployment skills developed during LaunchCode's Unit 2.
 
@@ -30,7 +30,7 @@ This project demonstrates front-end React development, RESTful API integration, 
 ## ✨ Features
 - 🎲 **Random Movie Generator** – Get spontaneous suggestions instantly.  
 - 🔍 **Smart Recommendation Search** – Personalized movie ideas using AI logic.  
-- 🎞️ **Genre & Keyword Filters** – Explore films by type or mood.  
+- 🎞️ **Genre & Keyword Filters** – Explore films by type or aspects.  
 - 💬 **Comment Section** – Users can discuss or leave feedback.  
 - 💾 **Backend Integration** – Fetch and persist movie data.  
 - 📱 **Responsive Design** – Works smoothly across desktop and mobile.
@@ -41,10 +41,10 @@ This project demonstrates front-end React development, RESTful API integration, 
 
 | Category | Tools / Frameworks |
 | :-- | :-- |
-| **Frontend** | React, JavaScript (ES6+), Vite |
+| **Frontend** | React, JavaScript, Vite |
 | **Backend** | Java, Spring Boot |
 | **Database** | MySQL |
-| **Styling** | CSS, Tailwind (optional) |
+| **Styling** | CSS |
 | **Hosting** | Netlify (frontend) / Render (backend) |
 | **Version Control** | Git & GitHub |
 | **Other Tools** | Postman, Figma, Lucidchart |
