@@ -30,7 +30,7 @@ This project demonstrates front-end React development, RESTful API integration, 
 ## ✨ Features
 - 🎲 **Random Movie Generator** – Get spontaneous suggestions instantly.  
 - 🔍 **Smart Recommendation Search** – Personalized movie ideas using AI logic.  
-- 🎞️ **Genre & Keyword Filters** – Explore films by type or aspects.  
+- 🎞️ **Genre & Aspect Filters** – Explore films by type or filmmaking aspects.  
 - 💬 **Comment Section** – Users can discuss or leave feedback.  
 - 💾 **Backend Integration** – Fetch and persist movie data.  
 - 📱 **Responsive Design** – Works smoothly across desktop and mobile.
@@ -89,7 +89,7 @@ Here's what users can expect to see:
 *Example: Homepage displaying random movie recommendations.*
 
 ![Results Screenshot](images/app-results-page.png)  
-*Example: Search results generated through AI movie suggestions.*
+*Example: Search results generated through filtered movie suggestions.*
 
 ### Quick Guide
 - Use the search bar to find recommendations.
