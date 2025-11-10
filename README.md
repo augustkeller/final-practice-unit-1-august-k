@@ -88,7 +88,7 @@ Here's what users can expect to see:
 ![Homepage Screenshot](images/app-homepage.png)  
 *Example: Homepage displaying random movie recommendations.*
 
-![Results Screenshot](images/results-placeholder.png)  
+![Results Screenshot](images/app-results-page.png)  
 *Example: Search results generated through AI movie suggestions.*
 
 ### Quick Guide
