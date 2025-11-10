@@ -105,7 +105,7 @@ Here's what users can expect to see:
 *Wireframe created in Figma showing core page structure.*
 
 ### Entity Relationship Diagram (ERD)
-![ERD Placeholder](images/erd-placeholder.png)  
+![ERD](images/erd.png)  
 *ERD created in Lucidchart visualizing backend data relationships.*
 
 ---
