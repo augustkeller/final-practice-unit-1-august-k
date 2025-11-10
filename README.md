@@ -86,12 +86,12 @@ Once both servers are running, visit `http://localhost:5173` in your browser.
 Here's what users can expect to see:
 
 <div align="center">
-  <img src="images/app-homepage.png" alt="Homepage Screenshot" width="75%" />
+  <img src="images/app-homepage.png" alt="Homepage Screenshot" width="60%" />
   <p><em>Example: Homepage displaying random movie recommendations.</em></p>
 </div>
 
 <div align="center">
-  <img src="images/app-results-page.png" alt="Results Screenshot" width="75%" />
+  <img src="images/app-results-page.png" alt="Results Screenshot" width="60%" />
   <p><em>Example: Search results generated through filtered movie suggestions.</em></p>
 </div>
 
