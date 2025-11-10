@@ -85,11 +85,15 @@ Once both servers are running, visit `http://localhost:5173` in your browser.
 
 Here's what users can expect to see:
 
-![Homepage Screenshot](images/app-homepage.png)  
-*Example: Homepage displaying random movie recommendations.*
+<div align="center">
+  <img src="images/app-homepage.png" alt="Homepage Screenshot" width="75%" />
+  <p><em>Example: Homepage displaying random movie recommendations.</em></p>
+</div>
 
-![Results Screenshot](images/app-results-page.png)  
-*Example: Search results generated through filtered movie suggestions.*
+<div align="center">
+  <img src="images/app-results-page.png" alt="Results Screenshot" width="75%" />
+  <p><em>Example: Search results generated through filtered movie suggestions.</em></p>
+</div>
 
 ### Quick Guide
 - Use the search bar to find recommendations.
