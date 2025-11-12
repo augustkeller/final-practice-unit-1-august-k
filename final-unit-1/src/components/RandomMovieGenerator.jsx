@@ -145,7 +145,7 @@ async function handleDeleteComment(commentId) {
                 {loadingAI ? "Generating..." : "Generate AI Info"}
             </button>
 
-            {/* --- COMMENTS SECTION --- */}
+            {/* COMMENTS SECTION */}
             <div style={{ marginTop: "20px" }}>
                 <h3>Comments</h3>
 

@@ -167,7 +167,7 @@ function Results() {
                                 {loadingId === movie.id ? "Generating..." : "Generate AI Info"}
                             </button>
 
-                            {/* --- COMMENTS SECTION --- */}
+                            {/* COMMENTS SECTION */}
                             <div style={{ marginTop: "10px" }}>
                                 <h4>Comments:</h4>
                                 {(!movie.comments || movie.comments.length === 0) ? (
