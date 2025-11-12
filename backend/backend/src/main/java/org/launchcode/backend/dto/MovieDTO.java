@@ -16,7 +16,7 @@ public class MovieDTO {
 
     private String posterUrl;
 
-    // ✅ Optional flag to control AI generation
+    // Optional flag to control AI generation
     private boolean generateAiData = false;
 
     // Getters and setters

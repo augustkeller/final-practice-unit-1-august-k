@@ -38,10 +38,9 @@ public class Movie {
         this.title = title;
         this.year = year;
         this.posterUrl = posterUrl;
-        // You can later set genre by looking up genreId
     }
 
-    // --- Getters and Setters ---
+    // Getters and Setters
     public Long getId() { return id; }
 
     public String getTitle() { return title; }
@@ -58,7 +57,7 @@ public class Movie {
 
     public Rating getRating() { return rating; }
 
-    // ✅ Safe and non-recursive version
+    //non-recursive
     public void setRating(Rating rating) {
         this.rating = rating;
         if (rating != null && rating.getMovie() != this) {

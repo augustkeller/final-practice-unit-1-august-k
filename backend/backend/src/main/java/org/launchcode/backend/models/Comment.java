@@ -25,7 +25,7 @@ public class Comment {
     @JsonBackReference
     private Movie movie;
 
-    // --- Constructors ---
+    // Constructors
     public Comment() {}
 
     public Comment(String content, String username, Movie movie) {
@@ -34,7 +34,7 @@ public class Comment {
         this.movie = movie;
     }
 
-    // --- Getters & Setters ---
+    // Getters & Setters
     public Long getId() { return id; }
 
     public String getContent() { return content; }

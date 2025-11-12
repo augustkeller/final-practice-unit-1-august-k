@@ -66,7 +66,7 @@ function Results() {
             .join(", "); // maps the selected categories and their accompanying scores
     }
 
-    // --- Fetch comments for a single movie ---
+    //Fetch comments for a single movie
     async function fetchComments(movieId) {
         try {
             const res = await fetch(`http://localhost:8080/api/comments/movie/${movieId}`);
@@ -81,7 +81,7 @@ function Results() {
         }
     }
 
-    // --- Add a comment ---
+    //Add a comment
     async function handleAddComment(e, movieId) {
         e.preventDefault();
         const content = commentInputs[movieId]?.trim();
@@ -108,7 +108,7 @@ function Results() {
         }
     }
 
-    // --- Delete a comment ---
+    //Delete a comment
     async function handleDeleteComment(commentId, movieId) {
         try {
             const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {

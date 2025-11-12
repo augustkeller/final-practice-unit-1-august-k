@@ -20,7 +20,7 @@ public class CommentController {
         this.movieRepository = movieRepository;
     }
 
-    // --- Create a comment for a movie ---
+    //Create a comment for a movie
     @PostMapping("/movie/{movieId}")
     public ResponseEntity<Comment> addComment(@PathVariable Long movieId, @RequestBody Comment comment) {
         return movieRepository.findById(movieId).map(movie -> {
@@ -30,13 +30,13 @@ public class CommentController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    // --- Get all comments for a movie ---
+    //Get all comments for a movie
     @GetMapping("/movie/{movieId}")
     public ResponseEntity<List<Comment>> getCommentsByMovie(@PathVariable Long movieId) {
         return ResponseEntity.ok(commentRepository.findByMovieId(movieId));
     }
 
-    // --- Delete a comment ---
+    //Delete a comment
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         return commentRepository.findById(id)

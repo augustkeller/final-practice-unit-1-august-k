@@ -6,7 +6,7 @@ const movies = JSON.parse(
   fs.readFileSync("./src/LaunchCode_Final_API.json", "utf-8")
 );
 
-// Map genre names to IDs (update IDs if your genre table is different)
+// Map genre names to IDs
 const genreMap = {
   "Action": 1,
   "Comedy": 2,

@@ -27,7 +27,7 @@ public class Rating {
     @JsonIgnoreProperties("rating")
     private Movie movie;
 
-    // --- Getters & Setters ---
+    //Getters & Setters
     public Long getId() { return id; }
     public int getWriting() { return writing; }
     public void setWriting(int writing) { this.writing = writing; calculateOverall(); }
@@ -53,12 +53,12 @@ public class Rating {
 
     public Movie getMovie() { return movie; }
 
-    // ✅ FIXED: no bidirectional recursion here
+    //fixed bidirectional recursion
     public void setMovie(Movie movie) {
-        this.movie = movie; // one-way link only
+        this.movie = movie; // one way link
     }
 
-    // --- Overall calculation ---
+    //Overall calculation
     public void calculateOverall() {
         this.overall = (writing + direction + cinematography + acting + editing +
                 sound + soundtrack + productionDesign + casting + effects) / 10.0;

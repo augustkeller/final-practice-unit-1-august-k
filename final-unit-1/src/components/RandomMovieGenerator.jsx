@@ -10,7 +10,7 @@ function RandomMovieGenerator() {
     const [newComment, setNewComment] = useState("");
     const [username, setUsername] = useState("Guest");
 
-    // --- Get random movie ---
+    //Get random movie
     function getRandomMovie() {
         if (!allMovies || allMovies.length === 0) return null;
         const randomIndex = Math.floor(Math.random() * allMovies.length);
@@ -21,7 +21,7 @@ function RandomMovieGenerator() {
         setRandomMovie(getRandomMovie());
     }
 
-    // --- Generate AI info ---
+    //Generate AI info
     async function handleGenerateAI() {
         if (!randomMovie) return;
         try {
@@ -45,7 +45,7 @@ function RandomMovieGenerator() {
         }
     }
 
-    // --- Load comments for selected movie ---
+    //Load comments for selected movie
     useEffect(() => {
         async function fetchComments() {
             if (!randomMovie) return;
@@ -62,7 +62,7 @@ function RandomMovieGenerator() {
         fetchComments();
     }, [randomMovie]);
 
-    // --- Add comment ---
+    //Add comment
     async function handleAddComment(e) {
         e.preventDefault();
         if (!newComment.trim()) return;
@@ -89,7 +89,7 @@ function RandomMovieGenerator() {
         }
     }
 
-// --- Delete comment ---
+//Delete comment
 async function handleDeleteComment(commentId) {
     try {
         const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
@@ -103,14 +103,14 @@ async function handleDeleteComment(commentId) {
     }
 }
 
-    // --- Set initial movie ---
+    //Set initial movie
     useEffect(() => {
         if (allMovies && allMovies.length > 0) {
             setRandomMovie(getRandomMovie());
         }
     }, [allMovies]);
 
-    // --- Conditional renders ---
+    //Conditional renders
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     if (!randomMovie) return <div>No movies available</div>;

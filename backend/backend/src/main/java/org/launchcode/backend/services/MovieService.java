@@ -20,7 +20,6 @@ public class MovieService {
     public MovieService(MovieRepository movieRepository, @Value("${GOOGLE_API_KEY}") String googleApiKey) {
         this.movieRepository = movieRepository;
 
-        // ✅ Proper builder usage
         this.client = Client.builder()
                 .apiKey(googleApiKey)
                 .build();

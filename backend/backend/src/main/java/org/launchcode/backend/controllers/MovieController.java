@@ -64,8 +64,8 @@ public class MovieController {
         // Handle optional rating
         Rating rating = movie.getRating();
         if (rating != null) {
-            rating.setMovie(movie);      // maintain bidirectional link
-            rating.calculateOverall();   // calculate overall score
+            rating.setMovie(movie); // maintain bidirectional link
+            rating.calculateOverall(); // calculate overall score
         }
 
         // Save movie (and rating if present)
@@ -123,7 +123,7 @@ public class MovieController {
                 .orElse(ResponseEntity.<Rating>notFound().build());
     }
 
-    // PUT (update) a rating for a specific movie
+    // PUT a rating for a specific movie
     @PutMapping("/{movieId}/rating")
     public ResponseEntity<Rating> updateRatingForMovie(@PathVariable Long movieId, @RequestBody Rating updatedRating) {
         return (ResponseEntity<Rating>) movieRepository.findById(movieId)
@@ -196,8 +196,8 @@ public class MovieController {
     public ResponseEntity<String> bulkUpdateAIWithDelay() {
         List<Movie> allMovies = movieRepository.findAll();
         int successCount = 0;
-        int batchSize = 5;         // Number of movies to process before pausing
-        long delayMillis = 60000;   // 1-minute delay between batches
+        int batchSize = 5; // Number of movies to process before pausing
+        long delayMillis = 60000; // 1-minute delay between batches
 
         for (int i = 0; i < allMovies.size(); i++) {
             Movie movie = allMovies.get(i);
@@ -237,7 +237,7 @@ public class MovieController {
         return ResponseEntity.ok("AI generation complete. Success for " + successCount + "/" + allMovies.size() + " movies.");
     }
 
-    // --- READ ALL (AI GENERATIONS) ---
+    // Get all (ai generations)
     @GetMapping("/ai")
     public ResponseEntity<List<Movie>> getAllAIMovies() {
         List<Movie> movies = movieRepository.findAll()
@@ -247,7 +247,7 @@ public class MovieController {
         return ResponseEntity.ok(movies);
     }
 
-    // --- READ ONE (AI GENERATION by ID) ---
+    // Get ai generation by ID
     @GetMapping("/ai/{id}")
     public ResponseEntity<Map<String, Object>> getAIMovieById(@PathVariable Long id) {
         return (ResponseEntity<Map<String, Object>>) movieRepository.findById(id)
@@ -269,7 +269,7 @@ public class MovieController {
                         .body(Map.of("error", "Movie not found with ID: " + id)));
     }
 
-    // --- DELETE (Remove AI data but keep movie) ---
+    // DELETE AI data but keep movie
     @DeleteMapping("/ai/{id}")
     public ResponseEntity<Movie> deleteAIGeneration(@PathVariable Long id) {
         return movieRepository.findById(id)

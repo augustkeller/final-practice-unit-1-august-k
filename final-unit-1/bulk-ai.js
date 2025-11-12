@@ -1,6 +1,6 @@
 async function bulkGenerateAI() {
   try {
-    // 1. Fetch all movies from backend
+    // Fetch all movies from backend
     const allMoviesRes = await fetch("http://localhost:8080/api/movies");
     const allMovies = await allMoviesRes.json();
 
